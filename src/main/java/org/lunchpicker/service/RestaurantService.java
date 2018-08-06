@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RestaurantService {
 
@@ -15,6 +17,10 @@ public class RestaurantService {
 
     public RestaurantService(RestaurantRepository repository) {
         this.repository = repository;
+    }
+
+    public List<Restaurant> findAll() {
+        return repository.findAll();
     }
 
     public void save(Restaurant restaurant) {

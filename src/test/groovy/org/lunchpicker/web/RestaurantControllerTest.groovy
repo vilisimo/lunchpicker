@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 
 import static org.mockito.Mockito.verify
+import static org.mockito.Mockito.when
 
 @RunWith(MockitoJUnitRunner)
 class RestaurantControllerTest {
@@ -33,6 +34,19 @@ class RestaurantControllerTest {
 
         //then
         result.statusCode == HttpStatus.OK
+    }
+
+    @Test
+    void "returns a list of restaurants"() {
+        //given
+        def data = [new Restaurant("Puzzle"), new Restaurant("MacLaren's")]
+        when(service.findAll()).thenReturn(data)
+
+        //when
+        def result = restaurants.getRestaurants()
+
+        //then
+        result.body.restaurants == data
     }
 
     @Test
