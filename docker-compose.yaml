@@ -1,0 +1,19 @@
+version: "3.3"
+services:
+
+  mysql:
+    image: mysql:5.7.22
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: mysqlpw
+      MYSQL_ROOT_HOST: '%'
+
+  lunchpicker:
+    image: org.lunchpicker:1.0.0
+    ports:
+      - 8080:8080
+    restart: on-failure
+    network_mode: "host"
