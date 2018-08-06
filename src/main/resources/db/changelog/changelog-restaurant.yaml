@@ -1,0 +1,21 @@
+databaseChangeLog:
+
+- changeSet:
+    id: restaurant-1
+    author: Simonas Viliunas
+    comment: Creates a 'restaurant' table
+    changes:
+    - createTable:
+        tableName: restaurant
+        columns:
+        - column:
+            name: id
+            type: varchar(36)
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: name
+            type: varchar(255)
+            constraints:
+              nullable: false
