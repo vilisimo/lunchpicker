@@ -5,17 +5,15 @@ import org.lunchpicker.service.RestaurantService;
 import org.lunchpicker.web.request.RestaurantRequest;
 import org.lunchpicker.web.response.RestaurantsResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RestController(value = "/restaurants")
+@RestController
+@RequestMapping(path = "/restaurants")
 public class RestaurantController {
 
     private final RestaurantService service;
@@ -37,5 +35,13 @@ public class RestaurantController {
         service.save(restaurant);
 
         return ResponseEntity.created(URI.create(restaurant.getId())).build();
+    }
+
+    @PatchMapping(path = "/{id}", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity updateRestaurant(@PathVariable String id, @RequestBody RestaurantRequest body) {
+        Restaurant restaurant = new Restaurant(id, body.name);
+        service.update(restaurant);
+
+        return ResponseEntity.ok().build();
     }
 }

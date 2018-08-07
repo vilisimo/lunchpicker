@@ -27,4 +27,9 @@ public class RestaurantService {
         repository.save(restaurant);
         logger.debug("Successfully created a restaurant[id={}]", restaurant.getId());
     }
+
+    public void update(Restaurant restaurant) {
+        repository.save(restaurant);
+        logger.debug("Successfully updated a restaurant[id={}]", restaurant.getId());
+    }
 }

@@ -1,5 +1,7 @@
 package org.lunchpicker.domain;
 
+import org.lunchpicker.util.Validations;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Objects;
@@ -16,6 +18,13 @@ public class Restaurant {
 
     public Restaurant(String name) {
         this.id = UUID.randomUUID().toString();
+        this.name = name;
+    }
+
+    public Restaurant(String id, String name) {
+        Validations.isUuid(id);
+
+        this.id = id;
         this.name = name;
     }
 

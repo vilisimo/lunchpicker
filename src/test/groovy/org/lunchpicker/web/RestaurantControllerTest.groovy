@@ -20,17 +20,17 @@ class RestaurantControllerTest {
     @Mock
     RestaurantService service
 
-    RestaurantController restaurants
+    RestaurantController controller
 
     @Before
     void setup() {
-        restaurants = new RestaurantController(service)
+        controller = new RestaurantController(service)
     }
 
     @Test
     void "returns 200 upon requesting restaurant list"() {
         //when
-        def result = restaurants.getRestaurants()
+        def result = controller.getRestaurants()
 
         //then
         result.statusCode == HttpStatus.OK
@@ -43,7 +43,7 @@ class RestaurantControllerTest {
         when(service.findAll()).thenReturn(data)
 
         //when
-        def result = restaurants.getRestaurants()
+        def result = controller.getRestaurants()
 
         //then
         result.body.restaurants == data
@@ -52,7 +52,7 @@ class RestaurantControllerTest {
     @Test
     void "returns 201 upon posting a restaurant"() {
         //when
-        def result = restaurants.createRestaurant(new RestaurantRequest(name: "Jack's Burgers"))
+        def result = controller.createRestaurant(new RestaurantRequest(name: "Jack's Burgers"))
 
         //then
         result.statusCode == HttpStatus.CREATED
@@ -64,7 +64,7 @@ class RestaurantControllerTest {
         def restaurant = new RestaurantRequest(name: "Joey's Pizza")
 
         //when
-        def response = restaurants.createRestaurant(restaurant)
+        def response = controller.createRestaurant(restaurant)
 
         //then
         def captor = ArgumentCaptor.forClass(Restaurant)
@@ -72,5 +72,36 @@ class RestaurantControllerTest {
 
         def result = captor.getValue()
         response.headers.get("Location").contains(result.getId())
+    }
+
+    @Test
+    void "patching updates a restaurant"() {
+        //given
+        def restaurant = new RestaurantRequest(name: "Joey's Pizza")
+        def uuid = UUID.randomUUID() as String
+
+        //when
+        controller.updateRestaurant(uuid, restaurant)
+
+        //then
+        def captor = ArgumentCaptor.forClass(Restaurant)
+        verify(service).update(captor.capture())
+        def result = captor.getValue()
+
+        result.id != uuid
+        result.name == restaurant.name
+    }
+
+    @Test
+    void "patching a restaurant returns 200"() {
+        //given
+        def restaurant = new RestaurantRequest(name: "Joey's Pizza")
+        def uuid = UUID.randomUUID() as String
+
+        //when
+        def response = controller.updateRestaurant(uuid, restaurant)
+
+        //then
+        response.statusCode == HttpStatus.OK
     }
 }

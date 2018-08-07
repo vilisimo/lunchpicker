@@ -8,6 +8,7 @@ import org.lunchpicker.persistence.RestaurantRepository
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
+import static org.mockito.ArgumentMatchers.any
 import static org.mockito.Mockito.verify
 
 @RunWith(MockitoJUnitRunner)
@@ -33,5 +34,17 @@ class RestaurantServiceTest {
 
         //then
         verify(repository).save(restaurant)
+    }
+
+    @Test
+    void "updates a restaurant"() {
+        //given
+        def restaurant = new Restaurant("Kim's Fills")
+
+        //when
+        service.update(restaurant)
+
+        //then
+        verify(repository).save(any(Restaurant))
     }
 }
