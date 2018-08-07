@@ -45,8 +45,20 @@ public class RestaurantService {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
+            logger.debug("Attempt to delete a restaurant[id={}] that does not exist was registered", id);
             throw new RestaurantNotFound("Restaurant[id=" + id + "] does not exist", e);
         }
         logger.debug("Successfully deleted a restaurant[id={}]", id);
+    }
+
+    public void vote(String id, float weight, int unique) {
+        int result = repository.vote(id, weight, unique);
+
+        if (result == 0) {
+            logger.debug("Attempt to vote for a restaurant[id={}] that does not exist was registered", id);
+            throw new RestaurantNotFound("Restaurant with id " + id + " does not exist");
+        }
+
+        logger.debug("Successfully voted for a restaurant[id={}], +{}", id, weight);
     }
 }

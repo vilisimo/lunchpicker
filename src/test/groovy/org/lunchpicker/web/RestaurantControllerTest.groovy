@@ -12,6 +12,10 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 
+import static org.mockito.ArgumentMatchers.anyFloat
+import static org.mockito.ArgumentMatchers.anyInt
+import static org.mockito.ArgumentMatchers.anyString
+import static org.mockito.ArgumentMatchers.eq
 import static org.mockito.Mockito.verify
 import static org.mockito.Mockito.when
 
@@ -137,5 +141,29 @@ class RestaurantControllerTest {
     void "passing in invalid UUID when deleting a restaurant throws exception"() {
         //when
         controller.deleteRestaurant("invalid")
+    }
+
+    @Test
+    void "returns 200 when vote completes successfully"() {
+        //when
+        def response = controller.vote(UUID.randomUUID().toString(), "userId")
+
+        //then
+        response.statusCode == HttpStatus.OK
+    }
+
+    @Test
+    void "voting on a restaurant instructs service layer to increment vote count"() {
+        //when
+        controller.vote(UUID.randomUUID().toString(), "userId")
+
+        //then
+        verify(service).vote(anyString(), anyFloat(), anyInt())
+    }
+
+    @Test(expected = InvalidUuid)
+    void "passing invalid UUID when voting throws exception"() {
+        //when
+        controller.vote("invalid", "userId")
     }
 }

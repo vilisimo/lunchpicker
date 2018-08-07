@@ -53,4 +53,12 @@ public class RestaurantController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping(path = "/{id}:vote")
+    public ResponseEntity vote(@PathVariable String id, @RequestHeader("userId") String userId) {
+        Validations.isUuid(id);
+        service.vote(id, 1.0f, 1);
+
+        return ResponseEntity.ok().build();
+    }
 }
