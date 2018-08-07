@@ -1,5 +1,7 @@
 package org.lunchpicker.util;
 
+import org.lunchpicker.exceptions.InvalidUuid;
+
 import java.util.UUID;
 
 public final class Validations {
@@ -9,6 +11,10 @@ public final class Validations {
     }
 
     public static void isUuid(String uuid) {
-        UUID.fromString(uuid);
+        try {
+            UUID.fromString(uuid);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidUuid(uuid + " is not a valid UUID", e);
+        }
     }
 }

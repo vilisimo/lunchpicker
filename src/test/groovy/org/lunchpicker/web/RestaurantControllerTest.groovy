@@ -4,6 +4,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.lunchpicker.domain.Restaurant
+import org.lunchpicker.exceptions.InvalidUuid
 import org.lunchpicker.service.RestaurantService
 import org.lunchpicker.web.request.RestaurantRequest
 import org.mockito.ArgumentCaptor
@@ -103,5 +104,38 @@ class RestaurantControllerTest {
 
         //then
         response.statusCode == HttpStatus.OK
+    }
+
+    @Test(expected = InvalidUuid)
+    void "passing in invalid UUID throws exception"() {
+        //when
+        controller.updateRestaurant("invalid", new RestaurantRequest(name: "filler"))
+    }
+
+    @Test
+    void "deleting a restaurant instructs deletion at a service layer"() {
+        //given
+        def uuid = UUID.randomUUID() as String
+
+        //when
+        controller.deleteRestaurant(uuid)
+
+        //then
+        verify(service).delete(uuid)
+    }
+
+    @Test
+    void "deleting returns 204"() {
+        //when
+        def response = controller.deleteRestaurant(UUID.randomUUID().toString())
+
+        //then
+        response.statusCode == HttpStatus.NO_CONTENT
+    }
+
+    @Test(expected = InvalidUuid)
+    void "passing in invalid UUID when deleting a restaurant throws exception"() {
+        //when
+        controller.deleteRestaurant("invalid")
     }
 }

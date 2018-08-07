@@ -2,6 +2,7 @@ package org.lunchpicker.web;
 
 import org.lunchpicker.domain.Restaurant;
 import org.lunchpicker.service.RestaurantService;
+import org.lunchpicker.util.Validations;
 import org.lunchpicker.web.request.RestaurantRequest;
 import org.lunchpicker.web.response.RestaurantsResponse;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,13 @@ public class RestaurantController {
         service.update(restaurant);
 
         return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity deleteRestaurant(@PathVariable String id) {
+        Validations.isUuid(id);
+        service.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,6 +1,7 @@
 package org.lunchpicker.util
 
 import org.junit.Test
+import org.lunchpicker.exceptions.InvalidUuid
 
 class ValidationsTest {
 
@@ -9,7 +10,7 @@ class ValidationsTest {
         Validations.isUuid(UUID.randomUUID().toString())
     }
 
-    @Test(expected = IllegalArgumentException)
+    @Test(expected = InvalidUuid)
     void "catches invalid UUID strings"() {
         Validations.isUuid("not UUID")
     }

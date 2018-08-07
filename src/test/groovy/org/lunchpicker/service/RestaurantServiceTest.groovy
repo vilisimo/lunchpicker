@@ -47,4 +47,16 @@ class RestaurantServiceTest {
         //then
         verify(repository).save(any(Restaurant))
     }
+
+    @Test
+    void "deletes a restaurant"() {
+        //given
+        def uuid = UUID.randomUUID() as String
+
+        //when
+        service.delete(uuid)
+
+        //then
+        verify(repository).deleteById(uuid)
+    }
 }
