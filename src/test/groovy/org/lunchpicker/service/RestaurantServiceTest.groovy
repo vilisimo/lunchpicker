@@ -9,12 +9,8 @@ import org.lunchpicker.persistence.RestaurantRepository
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
-import static org.mockito.ArgumentMatchers.any
-import static org.mockito.ArgumentMatchers.anyFloat
-import static org.mockito.ArgumentMatchers.anyInt
-import static org.mockito.ArgumentMatchers.anyString
-import static org.mockito.Mockito.verify
-import static org.mockito.Mockito.when
+import static org.mockito.ArgumentMatchers.*
+import static org.mockito.Mockito.*
 
 @RunWith(MockitoJUnitRunner)
 class RestaurantServiceTest {
@@ -63,6 +59,15 @@ class RestaurantServiceTest {
 
         //then
         verify(repository).deleteById(uuid)
+    }
+
+    @Test(expected = RestaurantNotFound)
+    void "throws exception when restaurant does not exist"() {
+        //given
+        doThrow(RestaurantNotFound).when(repository).existsById(anyString())
+
+        //when
+        service.exists(UUID.randomUUID() as String)
     }
 
     @Test

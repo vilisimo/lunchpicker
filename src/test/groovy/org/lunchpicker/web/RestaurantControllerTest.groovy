@@ -4,18 +4,17 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.lunchpicker.domain.Restaurant
+import org.lunchpicker.domain.User
 import org.lunchpicker.exceptions.InvalidUuid
 import org.lunchpicker.service.RestaurantService
+import org.lunchpicker.service.UserService
 import org.lunchpicker.web.request.RestaurantRequest
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 
-import static org.mockito.ArgumentMatchers.anyFloat
-import static org.mockito.ArgumentMatchers.anyInt
-import static org.mockito.ArgumentMatchers.anyString
-import static org.mockito.ArgumentMatchers.eq
+import static org.mockito.ArgumentMatchers.*
 import static org.mockito.Mockito.verify
 import static org.mockito.Mockito.when
 
@@ -23,13 +22,16 @@ import static org.mockito.Mockito.when
 class RestaurantControllerTest {
 
     @Mock
-    RestaurantService service
+    RestaurantService restaurants
+
+    @Mock
+    UserService users
 
     RestaurantController controller
 
     @Before
     void setup() {
-        controller = new RestaurantController(service)
+        controller = new RestaurantController(restaurants, users)
     }
 
     @Test
@@ -45,7 +47,7 @@ class RestaurantControllerTest {
     void "returns a list of restaurants"() {
         //given
         def data = [new Restaurant("Puzzle"), new Restaurant("MacLaren's")]
-        when(service.findAll()).thenReturn(data)
+        when(restaurants.findAll()).thenReturn(data)
 
         //when
         def result = controller.getRestaurants()
@@ -73,7 +75,7 @@ class RestaurantControllerTest {
 
         //then
         def captor = ArgumentCaptor.forClass(Restaurant)
-        verify(service).save(captor.capture())
+        verify(restaurants).save(captor.capture())
 
         def result = captor.getValue()
         response.headers.get("Location").contains(result.getId())
@@ -90,7 +92,7 @@ class RestaurantControllerTest {
 
         //then
         def captor = ArgumentCaptor.forClass(Restaurant)
-        verify(service).update(captor.capture())
+        verify(restaurants).update(captor.capture())
         def result = captor.getValue()
 
         result.id != uuid
@@ -125,7 +127,7 @@ class RestaurantControllerTest {
         controller.deleteRestaurant(uuid)
 
         //then
-        verify(service).delete(uuid)
+        verify(restaurants).delete(uuid)
     }
 
     @Test
@@ -145,6 +147,9 @@ class RestaurantControllerTest {
 
     @Test
     void "returns 200 when vote completes successfully"() {
+        //given
+        when(users.getUser(anyString())).thenReturn(new User("filler", 10))
+
         //when
         def response = controller.vote(UUID.randomUUID().toString(), "userId")
 
@@ -154,16 +159,88 @@ class RestaurantControllerTest {
 
     @Test
     void "voting on a restaurant instructs service layer to increment vote count"() {
+        //given
+        when(users.getUser(anyString())).thenReturn(new User("filler", 10))
+
         //when
         controller.vote(UUID.randomUUID().toString(), "userId")
 
         //then
-        verify(service).vote(anyString(), anyFloat(), anyInt())
+        verify(restaurants).vote(anyString(), anyFloat(), anyInt())
+    }
+
+    @Test
+    void "voting on a restaurant for a first time increments unique vote count"() {
+        //given
+        when(users.getUser(anyString())).thenReturn(new User("filler", 10))
+
+        //when
+        controller.vote(UUID.randomUUID().toString(), "userId")
+
+        //then
+        verify(restaurants).vote(anyString(), anyFloat(), eq(1))
+    }
+
+    @Test
+    void "appends a vote to existing user votes"() {
+        //given
+        when(users.getUser(anyString())).thenReturn(new User("filler", 10))
+
+        //when
+        controller.vote(UUID.randomUUID() as String, "username")
+
+        //then
+        def captor = ArgumentCaptor.forClass(User)
+        verify(users).save(captor.capture())
+        def user = captor.getValue()
+
+        user.castVotes.size() == 1
+    }
+
+    @Test
+    void "decrements user's vote count upon voting"() {
+        //given
+        when(users.getUser(anyString())).thenReturn(new User("filler", 10))
+
+        //when
+        controller.vote(UUID.randomUUID() as String, "username")
+
+        //then
+        def captor = ArgumentCaptor.forClass(User)
+        verify(users).save(captor.capture())
+        def user = captor.getValue()
+
+        user.votes == 9
+    }
+
+    @Test
+    void "before voting on a restaurant validates that it exists"() {
+        //given
+        def uuid = UUID.randomUUID() as String
+        when(users.getUser(anyString())).thenReturn(new User("filler", 10))
+
+        //when
+        controller.vote(uuid, "userId")
+
+        //then
+        verify(restaurants).exists(uuid)
     }
 
     @Test(expected = InvalidUuid)
     void "passing invalid UUID when voting throws exception"() {
         //when
         controller.vote("invalid", "userId")
+    }
+
+    @Test
+    void "Attempting to vote with a user that does not have any votes left returns bad request"() {
+        //given
+        when(users.getUser(anyString())).thenReturn(new User("filler", 0))
+
+        //when
+        def response = controller.vote(UUID.randomUUID() as String, "userId")
+
+        //then
+        response.statusCode == HttpStatus.BAD_REQUEST
     }
 }

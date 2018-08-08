@@ -13,8 +13,10 @@ import java.util.List;
 /**
  * Class responsible for operations/manipulations on a restaurant.
  *
- * Typically methods would be a bit more complicated, and it would make a bit
- * more sense to concentrate access to a DB in one place.
+ * Typically methods would be a bit more complicated, and, in some cases
+ * (e.g., {@link #exists(String)}), a bit more general rather than quick and
+ * dirty ways of achieving desired functionality for specific client
+ * (in this case, controller).
  */
 @Service
 public class RestaurantService {
@@ -51,11 +53,18 @@ public class RestaurantService {
         logger.debug("Successfully deleted a restaurant[id={}]", id);
     }
 
+    public void exists(String id) {
+        if(!repository.existsById(id)) {
+            logger.debug("Attempt to manipulate a restaurant[id={}] that does not exist was registered", id);
+            throw new RestaurantNotFound("Restaurant with id " + id + " does not exist");
+        }
+    }
+
     public void vote(String id, float weight, int unique) {
         int result = repository.vote(id, weight, unique);
 
         if (result == 0) {
-            logger.debug("Attempt to vote for a restaurant[id={}] that does not exist was registered", id);
+            logger.debug("Attempt to vote on a restaurant[id={}] that does not exist was registered", id);
             throw new RestaurantNotFound("Restaurant with id " + id + " does not exist");
         }
 

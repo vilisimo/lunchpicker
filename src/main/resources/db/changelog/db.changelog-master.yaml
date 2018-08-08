@@ -2,3 +2,9 @@ databaseChangeLog:
 - include:
     relativeToChangelogFile: true
     file: "changelog-restaurant.yaml"
+- include:
+    relativeToChangelogFile: true
+    file: "changelog-user.yaml"
+- include:
+    relativeToChangelogFile: true
+    file: "changelog-vote.yaml"

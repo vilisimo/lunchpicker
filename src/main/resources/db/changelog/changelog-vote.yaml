@@ -1,0 +1,32 @@
+databaseChangeLog:
+
+- changeSet:
+    id: vote-1
+    author: Simonas Viliunas
+    comment: Creates a 'vote' table
+    changes:
+    - createTable:
+        tableName: vote
+        columns:
+        - column:
+            name: id
+            type: varchar(36)
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: restaurant_id
+            type: varchar(36)
+            constraints:
+              nullabe: false
+        - column:
+            name: username
+            type: varchar(36)
+            constraints:
+              references: user(username)
+              foreignKeyName: fk_vote_user
+        - column:
+            name: timestamp
+            type: timestamp
+            constraints:
+              nullable: false

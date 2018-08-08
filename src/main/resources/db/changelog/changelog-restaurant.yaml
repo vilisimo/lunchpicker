@@ -19,3 +19,9 @@ databaseChangeLog:
             type: varchar(255)
             constraints:
               nullable: false
+        - column:
+            name: votes
+            type: decimal(5,2)
+        - column:
+            name: unique_votes
+            type: smallint unsigned
