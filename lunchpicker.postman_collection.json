@@ -1,0 +1,188 @@
+{
+	"info": {
+		"_postman_id": "551b826c-234f-49f2-87b0-c8a45a57a2ad",
+		"name": "lunchpicker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"_postman_id": "c3adbfc8-bf1a-4a98-a9a0-ee17885fd62c",
+			"name": "GET Restaurants",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/restaurants",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "13bdd8c2-5fe8-4b19-9fca-94b3968b7bbc",
+			"name": "POST Restaurant",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "695e8ee3-8a4b-45ab-a820-6c92615d73ff",
+						"type": "text/javascript",
+						"exec": [
+							"var restaurantId = postman.getResponseHeader(\"Location\")",
+							"postman.setGlobalVariable(\"restaurantId\", restaurantId);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Puzzle\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/restaurants",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "92e58747-e64e-4865-9c95-954ce74d05f6",
+			"name": "PATCH Restaurant",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Puzzles\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/restaurants/{{restaurantId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurants",
+						"{{restaurantId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "abd11309-1629-4266-b785-6061f6f73393",
+			"name": "DELETE Restaurant",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/restaurants/{{restaurantId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurants",
+						"{{restaurantId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "c3b5b978-d3d5-4fd5-8589-a1d36880cf5c",
+			"name": "POST Vote",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "username",
+						"value": "test"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/restaurants/{{restaurantId}}:vote",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restaurants",
+						"{{restaurantId}}:vote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "c11734b2-e8ea-4519-bd89-708b5e97ea89",
+			"name": "GET Winners",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/winners?from=2018-01-01&to=2018-12-31",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"winners"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "2018-01-01"
+						},
+						{
+							"key": "to",
+							"value": "2018-12-31"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
