@@ -18,4 +18,9 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, String> 
             "WHERE r.id = :id")
     @Transactional
     int vote(@Param("id") String uuid, @Param("weight") float weight, @Param("uniqueVotes") int uniqueVotes);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Restaurant r SET r.votes = 0, r.uniqueVotes = 0")
+    @Transactional
+    void resetVoteCounts();
 }
