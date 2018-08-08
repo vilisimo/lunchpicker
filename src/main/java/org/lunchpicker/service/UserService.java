@@ -36,4 +36,9 @@ public class UserService {
         users.save(user);
         logger.debug("Successfully saved a user[username={}]", user.getUsername());
     }
+
+    void resetVotes() {
+        users.resetVotes();
+        logger.debug("Successfully reset votes for all users");
+    }
 }

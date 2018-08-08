@@ -91,4 +91,22 @@ class RestaurantServiceTest {
         //when
         service.vote(UUID.randomUUID() as String, 1.0, 1)
     }
+
+    @Test
+    void "selects a winner"() {
+        //when
+        service.selectWinner()
+
+        //then
+        verify(repository).findFirstByOrderByVotesDescUniqueVotesDesc()
+    }
+
+    @Test
+    void "resets vote counts"() {
+        //when
+        service.resetVoteCounts()
+
+        //then
+        repository.resetVoteCounts()
+    }
 }

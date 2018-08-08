@@ -13,3 +13,5 @@ it just did not seem that a higher limit for a toy project would be needed.
 4. **There can be no more than 65535 unique votes.** Again, no particular
 reason, it could very well be `BIGINT`, but that seems a bit too much for this
 project.
+5. **By voting users are picking the next day's winner.** That is, if users
+vote on restaurants on Tuesday, they will be picking Wednesday's winner.

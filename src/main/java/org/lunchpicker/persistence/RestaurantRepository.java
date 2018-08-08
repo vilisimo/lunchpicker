@@ -23,4 +23,10 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, String> 
     @Query("UPDATE Restaurant r SET r.votes = 0, r.uniqueVotes = 0")
     @Transactional
     void resetVoteCounts();
+
+    /**
+     * Uses Spring JPA derived queries. Looks awful but is quite sufficient
+     * for proof of concept work.
+     */
+    Restaurant findFirstByOrderByVotesDescUniqueVotesDesc();
 }

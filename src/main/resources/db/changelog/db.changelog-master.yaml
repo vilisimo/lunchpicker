@@ -8,3 +8,6 @@ databaseChangeLog:
 - include:
     relativeToChangelogFile: true
     file: "changelog-vote.yaml"
+- include:
+    relativeToChangelogFile: true
+    file: "changelog-winner.yaml"

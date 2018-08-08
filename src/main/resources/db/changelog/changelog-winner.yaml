@@ -1,0 +1,26 @@
+databaseChangeLog:
+
+- changeSet:
+    id: winner-1
+    author: Simonas Viliunas
+    comment: Creates a 'winner' table
+    changes:
+    - createTable:
+        tableName: winner
+        columns:
+        - column:
+            name: id
+            type: varchar(36)
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: name
+            type: varchar(36)
+            constraints:
+              nullabe: false
+        - column:
+            name: date
+            type: date
+            constraints:
+              nullabe: false
