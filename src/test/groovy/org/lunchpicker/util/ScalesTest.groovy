@@ -46,7 +46,7 @@ class ScalesTest {
     }
 
     @Test
-    void "recognizes >3rd votes"() {
+    void "recognizes subsequent votes"() {
         //given
         def user = new User("username", 10)
         user.castVotes = [new Vote("restaurant")] * 5  as Set
