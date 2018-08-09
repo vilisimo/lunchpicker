@@ -2,7 +2,6 @@ package org.lunchpicker.persistence.specification;
 
 import org.lunchpicker.domain.Winner;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
@@ -16,7 +15,7 @@ public final class WinnerSpecification {
     }
 
     public static Specification<Winner> between(LocalDate from, LocalDate to) {
-        return Specifications.where(fromDate(from)).and(toDate(to));
+        return Specification.where(fromDate(from)).and(toDate(to));
     }
 
     private static Specification<Winner> fromDate(LocalDate fromDate) {
