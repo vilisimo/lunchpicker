@@ -28,6 +28,8 @@ repositories {
     mavenCentral()
 }
 
+mainClassName = 'org.lunchpicker.LunchPickerApp'
+
 ext['groovy.version'] = '2.5.1'
 
 dependencies {
