@@ -1,6 +1,7 @@
 package org.lunchpicker.web.response;
 
 public class ErrorResponse {
+
     public String message;
 
     public ErrorResponse(String message) {

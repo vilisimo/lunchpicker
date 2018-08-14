@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class RestaurantsResponse {
+
     private final int total;
     private final List<Restaurant> restaurants;
 

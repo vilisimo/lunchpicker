@@ -16,10 +16,7 @@ import java.util.List;
  * Mainly helps to avoid directly wiring in repositories into various services
  * which can then become quite laborious to maintain.
  *
- * Typically methods would be a bit more complicated, and, in some cases
- * (e.g., {@link #exists(String)}), a bit more general rather than quick and
- * dirty ways of achieving desired functionality for specific client
- * (in this case, controller).
+ * Typically methods would be a bit more complicated, though.
  */
 @Service
 public class RestaurantService {
@@ -74,11 +71,11 @@ public class RestaurantService {
         logger.debug("Successfully voted for a restaurant[id={}], +{}", id, weight);
     }
 
-    Restaurant selectWinner() {
+    public Restaurant selectWinner() {
         return repository.findFirstByOrderByVotesDescUniqueVotesDesc();
     }
 
-    void resetVoteCounts() {
+    public void resetVoteCounts() {
         repository.resetVoteCounts();
         logger.debug("Successfully reset votes for all restaurants to 0");
     }

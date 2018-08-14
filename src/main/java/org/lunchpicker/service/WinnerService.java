@@ -30,7 +30,6 @@ public class WinnerService {
     }
 
     public List<Winner> find(WinnerSearchCriteria criteria) {
-        return repository.findAll(where(between(criteria.from, criteria.to)),
-                new Sort(Sort.Direction.DESC, "date"));
+        return repository.findAll(where(between(criteria.from, criteria.to)), new Sort(Sort.Direction.DESC, "date"));
     }
 }
