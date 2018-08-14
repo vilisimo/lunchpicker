@@ -47,6 +47,8 @@ public class RestaurantController {
 
     @PatchMapping(path = "/{id}", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity updateRestaurant(@PathVariable String id, @RequestBody RestaurantRequest body) {
+        Validations.isUuid(id);
+
         Restaurant restaurant = new Restaurant(id, body.name);
         restaurants.update(restaurant);
 
