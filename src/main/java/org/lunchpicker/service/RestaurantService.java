@@ -6,6 +6,7 @@ import org.lunchpicker.persistence.RestaurantRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class RestaurantService {
     }
 
     public List<Restaurant> findAll() {
-        return repository.findAll();
+        return repository.findAll(new Sort(Sort.Direction.DESC, "votes", "uniqueVotes"));
     }
 
     public void save(Restaurant restaurant) {
