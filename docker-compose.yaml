@@ -17,3 +17,10 @@ services:
       - 8080:8080
     restart: on-failure
     network_mode: "host"
+
+  remote-lunchpicker:
+    image: vilisimo/lunchpicker:latest
+    ports:
+      - 8080:8080
+    restart: on-failure
+    network_mode: "host"
